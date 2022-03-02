@@ -1,5 +1,9 @@
 package lotto.view;
 
+import lotto.model.lotto.LottoResponse;
+import lotto.model.lotto.LottoStorage;
+
+import java.util.List;
 import java.util.Set;
 
 public class OutputView {
@@ -20,8 +24,9 @@ public class OutputView {
         printMessage(size + PURCHASE_MESSAGE);
     }
 
-    public void printLottos(Set<Integer> numbers) {
-        System.out.println(numbers);
+    public void printLottos(List<LottoResponse> lottoStorage) {
+        printLottosSize(lottoStorage.size());
+        lottoStorage.forEach(lottoResponse -> System.out.println(lottoResponse.getNumbers()));
     }
 
     public void printResultMessage() {

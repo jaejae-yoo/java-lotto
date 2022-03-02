@@ -6,23 +6,29 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lotto.model.message.BonusBallExceptionMessage;
 import lotto.model.message.WinningNumberExceptionMessage;
 import lotto.utils.ConverterUtils;
 import lotto.utils.InputValidateUtils;
 
-public class WinningNumber {
+public class WinningLotto {
     private static final int WINNING_NUMBER_SIZE = 6;
     private static final String CONCAT = "";
 
     private final Set<Integer> winningNumbers;
+    private final int bonusBall;
 
-    public WinningNumber(List<String> numbers) {
+    public WinningLotto(List<String> numbers, String bonusBall) {
         inputBlank(numbers);
         InputValidateUtils.inputNumber(makeNumbersToString(numbers), WinningNumberExceptionMessage.NUMBER_ERROR.getMassage());
         validateNumberOutOfRange(numbers);
         validateNumberSize(numbers);
         validateNumberReduplication(numbers);
+        InputValidateUtils.inputBlank(bonusBall, BonusBallExceptionMessage.BLANK_ERROR.getMessage());
+        InputValidateUtils.inputNumber(bonusBall, BonusBallExceptionMessage.NUMBER_ERROR.getMessage());
+        InputValidateUtils.inputOutOfRange(bonusBall, BonusBallExceptionMessage.RANGE_ERROR.getMessage());
         this.winningNumbers = makeWinningNumbers(numbers);
+        this.bonusBall = ConverterUtils.convertStringToInt(bonusBall);
     }
 
     private void inputBlank(List<String> numbers) {
@@ -74,16 +80,20 @@ public class WinningNumber {
         return Collections.unmodifiableSet(winningNumbers);
     }
 
+    public int getBonusBall() {
+        return bonusBall;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WinningNumber that = (WinningNumber) o;
-        return Objects.equals(winningNumbers, that.winningNumbers);
+        WinningLotto that = (WinningLotto) o;
+        return bonusBall == that.bonusBall && Objects.equals(winningNumbers, that.winningNumbers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(winningNumbers);
+        return Objects.hash(winningNumbers, bonusBall);
     }
 }
